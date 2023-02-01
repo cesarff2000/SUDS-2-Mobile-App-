@@ -1,0 +1,6 @@
+module Pods_Suds_2_U {
+  umbrella header "Pods-Suds_2_U-umbrella.h"
+
+  export *
+  module * { export * }
+}

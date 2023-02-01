@@ -1,0 +1,25 @@
+{
+  "name": "RNPaypal",
+  "version": "4.1.0",
+  "summary": "react-native-paypal",
+  "license": "MIT",
+  "description": "React Native library that implements PayPal Checkout flow using purely native code",
+  "homepage": "https://github.com/smarkets/react-native-paypal",
+  "authors": "Smarkets",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/smarkets/react-native-paypal.git",
+    "tag": "4.1.0"
+  },
+  "source_files": "ios/**/*.{h,m}",
+  "dependencies": {
+    "React": [
+
+    ],
+    "Braintree": [
+
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "811732010301",
+    "project_id": "suds-2-u-ios",
+    "storage_bucket": "suds-2-u-ios.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811732010301:android:bea03b835777c627ed3154",
+        "android_client_info": {
+          "package_name": "com.suds_2_u"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811732010301-0nlr7im8vf7lisun53f1j9ta2n5rce79.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0HEJWZLdvoFNgPSsbmUSiNF9ERe12tjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811732010301-0nlr7im8vf7lisun53f1j9ta2n5rce79.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "811732010301-foq4rltvctc4k6hgjurvi1gimbmv4jna.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Suds.react"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

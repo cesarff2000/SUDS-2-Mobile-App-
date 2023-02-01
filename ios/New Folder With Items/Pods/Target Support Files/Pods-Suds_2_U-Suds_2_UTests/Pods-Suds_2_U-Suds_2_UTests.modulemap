@@ -1,0 +1,6 @@
+module Pods_Suds_2_U_Suds_2_UTests {
+  umbrella header "Pods-Suds_2_U-Suds_2_UTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
