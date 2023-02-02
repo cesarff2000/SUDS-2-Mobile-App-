@@ -69,16 +69,23 @@ const ScheduleList = ({ navigation, route, disabled }) => {
   };
 
   const onChangeUnavailble = () => {
-    setModalVisible(true)
+      setTimeout(()=>{
+          setModalVisible(true);
+      },1000);
   };
 
   const onDChange = (selectedDate) => {
     const currentDate = selectedDate || date;
     // setShow(Platform.OS === 'ios');
     // setShow(false);
-    setTimeSelected(true)
-    setDate(currentDate);
-    showTimer()
+      console.log("selectedDate", selectedDate);
+      if(selectedDate instanceof Date && typeof date.selectedDate === 'function') {
+          console.log("onDchange currentDate", selectedDate);
+        setTimeSelected(true)
+        setDate(selectedDate);
+        showTimer()
+      }
+      
   };
 
   const timemodel = (name) => {
@@ -105,18 +112,15 @@ const ScheduleList = ({ navigation, route, disabled }) => {
 
       }
       console.log("id...", data)
-      
       await getWasherSchedule(data, setWasherScheduleData, setAvailableWasher);
-        })
-        
+
+    })
   }
 
 
   const checkBooking = (val, unavailabletime) => {
     setButtonAEnabled(false);
-    
     console.log('washerScheduleData3...', washerScheduleData)
-    console.log("availablewasherworking",availableWasher)
     if (availableWasher) {
       console.log("unavailabletime", unavailabletime)
       if (unavailabletime.length > 0 && unavailabletime.includes(val)) {
@@ -150,7 +154,8 @@ const ScheduleList = ({ navigation, route, disabled }) => {
   // }
 
   const showTimer = () => {
-    var showModal = show ? false : true
+      console.log("showtimerworking")
+    var showModal = show ? true : true
     setShow(showModal)
   }
 
@@ -164,6 +169,7 @@ const ScheduleList = ({ navigation, route, disabled }) => {
             date={date}
             onDChange={onDChange}
             checkBooking={checkBooking}
+            setSelectedWasherTime={setSelectedWasherTime}
           /> :
           <></>
       }
@@ -179,7 +185,11 @@ const ScheduleList = ({ navigation, route, disabled }) => {
             startFromMonday={true}
             // allowRangeSelection={true}
             // allowBackwardRangeSelect={false}
-            onPressIn={() => { showTimer() }}
+            onPressIn={(date) => {
+                console.log("date", date);
+                //showTimer()
+                
+            }}
             minDate={new Date(2021, 1, 1)}
             maxDate={new Date(2050, 6, 3)}
             weekdays={state.weekday}
@@ -229,7 +239,7 @@ const ScheduleList = ({ navigation, route, disabled }) => {
                       keyExtractor={(item, index) => index}
                       renderItem={({ item, index }) =>
                         <Hour item={item} index={index}
-                          // select={onSelect} 
+                          // select={onSelect}
                           selected={index == date.getHours()}
                           backgroundColor={checkBooking(item)} />
                       }
@@ -339,20 +349,22 @@ const styles = StyleSheet.create({
   }
 });
 
-const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
+const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking, setSelectedWasherTime }) => {
   const { washerUnavailableSet, getWasherUnavailable } = useContext(BookingContext)
-  const [fromtime, setFromtime] = useState("");
+  const [fromtime, setFromtime] = useState([]);
   const [totime, setTotime] = useState("");
   const [unavailableWasher, setUnAvailableWasher] = useState(true);
   const [unavailabletime, setUnavailabletime] = useState([]);
-
   const onSelect = (index, color) => {
+      console.log("testonselect",index,color)
     if (color == 'white') {
-      setModalVisible(true);
-      // index = index.split(/:/);
-      // date.setHours(parseInt(index[0]), parseInt(index[1]), 0, 0)
-      // // date.setHours(index,0,0,0)
-      // onDChange(date)
+//        setTimeout(()=>{
+            setModalVisible(true);
+//        },1000);
+       index = index.split(/:/);
+        console.log("date", date, index);
+       date.setHours(parseInt(index[0]), parseInt(index[1]), 0, 0);
+       onDChange(date);
       setFromtime(index);
       console.log("index", index)
     } else if (color == '#c43636') {
@@ -365,7 +377,11 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
   }
   const [modalVisible, setModalVisible] = useState(false);
   const Hour = ({ item, index, selected, select, backgroundColor }) => (
-    <TouchableOpacity onPress={() => { onSelect(item, backgroundColor) }} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor: backgroundColor }} >
+                                                                        <TouchableOpacity onPress={()=>{
+                                                                            console.log("testonpress");
+        onSelect(item, backgroundColor);
+                                                                            
+                                                                        }} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor: backgroundColor }} >
       {/* <TouchableOpacity onPress={()=>select(item)} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor : selected ?Colors.blue_color :'white' }} ></TouchableOpacity> */}
       {/* <Text style={{ fontSize: 16, fontWeight: 'bold', color : selected ? 'white' : 'black' }} > */}
       <Text style={{ fontSize: 16, fontWeight: 'bold', color: backgroundColor == 'white' ? 'black' : 'white' }} >
@@ -381,7 +397,8 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
   }, [])
   const washerUnavailableSetData = async () => {
     AsyncStorage.getItem("washer_id").then(async (result) => {
-      let end_time = fromtime.split(":");
+        console.log("fromtime",fromtime)
+      let end_time = [...fromtime];
       end_time[1] = Number(end_time[1]) + 30;
       if (Number(end_time[1]) > 59) {
         end_time[0] = Number(end_time[0]) + 1;
@@ -392,13 +409,13 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
       var data = {
         washer_id: JSON.parse(result),
         unavailable_date: dat,
-        start_time: fromtime,
+        start_time: fromtime.join(":"),
         end_time
       }
       console.log("id...", data)
       await washerUnavailableSet(data);
-      const res = await getWasherUnavailable(data.unavailable_date, setUnavailabletime);
-      console.log("setUnavailabletime..", res)
+      await getWasherUnavailable(data.unavailable_date, setUnavailabletime);
+      console.log("setUnavailabletime..", unavailabletime)
       // if(extra){
       //   console.log("washerScheduleData..",washerScheduleData)
       //   if(washerScheduleData.length == 0){
@@ -451,56 +468,65 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
                   <Hour item={item} index={index} selected={index == date.getHours()}
                     backgroundColor={checkBooking(item, unavailabletime)} />
               }
+          onPress={() => {
+              setTimeout(()=>{
+                  setModalVisible(true);
+              },1000);
+           
+          }}
               contentContainerStyle={{ padding: 10 }}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
 
           </TouchableOpacity>
         </TouchableOpacity>
-      </Modal>
-      <View style={{ justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Would you like to mark the Time as Unavailable?</Text>
-              <Text style={styles.modalText}>Click Yes to UnAvail, No to continue</Text>
-              <View style={{ flexDirection: 'row', }} >
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => {
-                    setModalVisible(false);
-                    // setShow(true)
-                    washerUnavailableSetData(moment(date).format('YYYY-MM-DD'))
-                    //getWasherScheduleData(moment(date).format('YYYY-MM-DD'),"extra")
-                  }
-                  }
-                >
-                  <Text style={styles.textStyle}>Yes</Text>
-                </Pressable>
+          
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Would you like to mark the Time as Unavailable?</Text>
+                <Text style={styles.modalText}>Click Yes to UnAvail, No to continue</Text>
+                <View style={{ flexDirection: 'row', }} >
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+          
+                    onPress={() => {
+                      setModalVisible(false);
+                      // setShow(true)
+                        washerUnavailableSetData(moment(date).format('YYYY-MM-DD'))
+                      //getWasherScheduleData(moment(date).format('YYYY-MM-DD'),"extra")
+                    }
+                    }
+                  >
+                    <Text style={styles.textStyle}>Yes</Text>
+                  </Pressable>
 
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => {
-                    setModalVisible(false);
-                    // washerUnavailableSetData()
-                    //getWasherScheduleData(moment(date).format('YYYY-MM-DD'))
-                    setSelectedWasherTime(true)
-                  }}
-                >
-                  <Text style={styles.textStyle}>No</Text>
-                </Pressable>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      setModalVisible(false);
+                      // washerUnavailableSetData()
+                      //getWasherScheduleData(moment(date).format('YYYY-MM-DD'))
+                      setSelectedWasherTime(true)
+                    }}
+                  >
+                    <Text style={styles.textStyle}>No</Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+      </Modal>
+      <View style={{ justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}>
+   
       </View>
     </View>
   )
