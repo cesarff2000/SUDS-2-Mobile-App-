@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import MapView, { Marker } from "react-native-maps";
 import Colors from "../../Constants/Colors";
 import { Icon } from "react-native-elements";

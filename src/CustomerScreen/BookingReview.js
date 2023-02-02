@@ -144,6 +144,7 @@ const BookingReview = () => {
  
     const openPaymentSheet = async () => {
         const clientSecret = await initializePaymentSheet()
+        await new Promise((resolve) => setTimeout(resolve,2500));
         const { error } = await presentPaymentSheet({ clientSecret });
 
         if (error) {
