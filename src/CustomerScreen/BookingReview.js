@@ -138,7 +138,7 @@ const BookingReview = () => {
         if (!error) {
             console.log(paymentIntent)
           }
-    return;
+    return paymentIntent;
     };
 
  

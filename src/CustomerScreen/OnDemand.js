@@ -65,12 +65,27 @@ const OnDemand = ({ route }) => {
     return () => setCurrentBooking({});
   }, [route]);
 
-
+  useEffect(()=>{
+    PushNotificationIOS.addNotificationRequest({
+      id: "sudschanelid",
+      title: "sudstest",
+      body: "test",
+      badge: 0,
+      repeats: false,
+      // message: remoteMessage.notification.body,
+      // bigPictureUrl: imageUrl,
+      // smallIcon: imageUrl,
+      // data: remoteMessage.data,
+        
+    });
+    
+    console.log("sudstesting111")
+},[])
   const getNearestWasher = async () => {
     setTimeout(async () => {
       let info = await getCurrentPosition();
       console.log('info...',info)
-      let json = await getNearByVendor(info.coords.latitude, info.coords.longitude, 0);
+      //let json = await getNearByVendor(info.coords.latitude, info.coords.longitude, 0);
       var marker = json?.data.map((washer) => {
         return {
           latitude: washer.latitude,

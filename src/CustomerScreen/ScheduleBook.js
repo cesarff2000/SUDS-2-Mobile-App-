@@ -8,7 +8,7 @@ import CalendarPicker from 'react-native-calendar-picker';
 import Colors from '../../Constants/Colors';
 import { Icon } from 'react-native-elements';
 import { afterScheduleScreen, changeStack } from '../Navigation/NavigationService';
-import { BookingContext, calculateTotalPrice } from '../Providers/BookingProvider';
+import { BookingContext , calculateTotalPrice} from '../Providers/BookingProvider';
 import moment from 'moment';
 import { Modal } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -18,9 +18,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const ScheduleBook = ({ navigation, route }) => {
-  const { currentBooking, setCurrentBooking, getWahserCalendar, getWasherSchedule, getExtraTimeFee, getServiceFee } = useContext(BookingContext)
+  const { currentBooking, setCurrentBooking, getWahserCalendar, getWasherSchedule ,getExtraTimeFee , getServiceFee} = useContext(BookingContext)
 
-  const [timeSelected, setTimeSelected] = useState(false)
+  const [timeSelected,setTimeSelected] = useState(false)
   const [localbooking, setLocalbooking] = useState()
 
   const [state, setState] = useState({
@@ -61,8 +61,8 @@ const ScheduleBook = ({ navigation, route }) => {
     // setShow(true)
   };
 
-  const onDChange = (selectedDate) => {
-    console.log("onDchange", selectedDate);
+  const onDChange = ( selectedDate) => {
+    console.log("onDchange",selectedDate);
     const currentDate = selectedDate || date;
     // setShow(Platform.OS === 'ios');
     setShow(false);
@@ -79,7 +79,7 @@ const ScheduleBook = ({ navigation, route }) => {
   const [buttonAEnabled, setButtonAEnabled] = useState(true);
   const [date, setDate] = useState(new Date(Date.now()));
   const [show, setShow] = useState(false);
-  const [busyDays, setBusyDays] = useState([... new Array(new Date().getDate() - 1)].map((value, index) => new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (index + 1)))
+  const [busyDays, setBusyDays] = useState([... new Array(new Date().getDate()-1)].map((value, index) => new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+(index+1)))
   const [washerScheduleData, setWasherScheduleData] = useState([]);
   const [availableWasher, setAvailableWasher] = useState(true);
   const [extraTimeFee, setExtraTimeFee] = useState('Loading...')
@@ -88,12 +88,12 @@ const ScheduleBook = ({ navigation, route }) => {
   useEffect(() => {
     // getWahserCalendar(setBusyDays, currentBooking?.washer_id)
     setCurrentBooking(cv => ({ ...cv, total: calculateTotalPrice(currentBooking, [extraTimeFee, serviceFee]) }))
-
+    
     AsyncStorage.getItem('multipledatastoreschedule').then(result => {
       let storedata = JSON.parse(result) || []
       setLocalbooking(storedata);
-      console.log('res1...', storedata)
-    })
+      console.log('res1...',storedata)
+  })
 
 
     getWasherScheduleData(moment(date).format('YYYY-MM-DD'))
@@ -102,7 +102,7 @@ const ScheduleBook = ({ navigation, route }) => {
 
   const getWasherScheduleData = async (date) => {
     var data = {
-      washer_id: currentBooking?.washer_id,
+      washer_id : currentBooking?.washer_id,
       date: date
     }
     console.log("getWasherScheduleData1...", data)
@@ -110,7 +110,7 @@ const ScheduleBook = ({ navigation, route }) => {
   }
 
   const onContinue = () => {
-    if (!timeSelected) return Alert.alert('Select time', 'Please select time before you continue.')
+    if(!timeSelected) return Alert.alert('Select time', 'Please select time before you continue.')
     setCurrentBooking(cv => ({ ...cv, booking_date: moment(date).format('YYYY-MM-DD'), booking_time: date.toLocaleTimeString() }))
     if (afterScheduleScreen.current != null) navigation.navigate(afterScheduleScreen.current)
     else navigation.navigate('Booking Review', route.params)
@@ -119,8 +119,10 @@ const ScheduleBook = ({ navigation, route }) => {
 
 
   const checkBooking = (val, unavailabletime) => {
-    // setButtonAEnabled(false);
+    setButtonAEnabled(false);
+      if(true){
     console.log('washerScheduleData3...', washerScheduleData)
+      }
     if (availableWasher) {
       console.log("unavailabletime",unavailabletime)
       if (unavailabletime.length > 0 && unavailabletime.includes(val)) {
@@ -145,17 +147,17 @@ const ScheduleBook = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
-      {show && <DailySchedule dismiss={() => setShow(false)} item={show} date={date} onDChange={onDChange} checkBooking={checkBooking} />}
+      {show && <DailySchedule dismiss={() => setShow(false)} item={show} date={date} onDChange={onDChange} checkBooking={checkBooking}/>}
       <ScrollView style={{ backgroundColor: '#fff' }}>
         <View style={{ backgroundColor: '#e28c39' }}>
           <Text style={styles.titleStyle}>
-
-            {localbooking?.map((data, i) =>
-              <Text key={i}>
-                {data.vehiclename}
-              </Text>
+         
+          {localbooking?.map((data,i) => 
+            <Text key={i}>
+            {data.vehiclename}
+            </Text>
             )}
-
+            
           </Text>
         </View>
         <View>
@@ -179,11 +181,11 @@ const ScheduleBook = ({ navigation, route }) => {
               backgroundColor: Colors.dark_orange, width: 30, height: 30, color: '#fff', fontWeight: 'bold',
               textAlign: 'center', paddingTop: 5,
             }}
-
-            disabledDates={busyDays.map((day) => new Date(day))}
+            
+            disabledDates={busyDays.map((day) => new Date (day))}
             disabledDatesTextStyle={{ padding: 5, color: '#bbb', borderRadius: 3 }}
             selectedDayColor="#66ff33"
-
+            
             selectedDayStyle={{
               backgroundColor: Colors.dark_orange, width: 30, height: 30, color: '#fff', fontWeight: 'bold',
               textAlign: 'center', paddingTop: 5, borderRadius: 0
@@ -218,7 +220,7 @@ const ScheduleBook = ({ navigation, route }) => {
           style={styles.auth_btn}
           underlayColor='gray'
           activeOpacity={0.8}>
-          <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold', marginTop: 3 }}>Continue</Text>
+          <Text style={{fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold', marginTop: 3 }}>Continue</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -262,60 +264,59 @@ const styles = StyleSheet.create({
   },
 });
 
-const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
+const DailySchedule = ({ dismiss,item, date, onDChange, checkBooking }) => {
 
-  const { washerUnavailableSet, getWasherUnavailable } = useContext(BookingContext)
-  const [fromtime, setFromtime] = useState("");
-  const [totime, setTotime] = useState("");
+  const { washerUnavailableSet , getWasherUnavailable} = useContext(BookingContext)
+  const [ fromtime, setFromtime ] = useState("");
+  const [ totime, setTotime ] = useState("");
   const [unavailabletime, setUnavailabletime] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-
-  const onSelect = (index, color) => {
-    console.log("onSelect", index, color);
-    if (color == 'white') {
+  
+  const onSelect = (index, color)=>{
+    console.log("onSelect",index,color);
+    if(color == 'white') {
       index = index.split(/:/);
       date.setHours(parseInt(index[0]), parseInt(index[1]), 0, 0)
       onDChange(date)
-    } else if (color == '#c43636') {
+    } else if(color == '#c43636') {
       Alert.alert('This slot is already booked. You can select the another slot.')
     } else if (color == '#2596BE') {
       Alert.alert('Washer is not available.')
     }
   }
 
-  useEffect(async () => {
+  useEffect(async ()=>{
     washerUnavailableSetData(moment(date).format('YYYY-MM-DD'))
-
     let end_time = fromtime.split(":");
-    if (end_time[0] && end_time[1]) {
-      await getWasherUnavailable(new Date(date).toISOString().slice(0, 10), setUnavailabletime);
-
-    }
-  }, [])
+    if (end_time[0] && end_time[1])
+    {await getWasherUnavailable(new Date(date).toISOString().slice(0 , 10) , setUnavailabletime);
+    
+  }
+  },[])
 
   const washerUnavailableSetData = async () => {
     AsyncStorage.getItem("washer_id").then(async (result) => {
       let end_time = fromtime.split(":");
-      end_time[1] = Number(end_time[1]) + 30;
-      if (Number(end_time[1]) > 59) {
-        end_time[0] = Number(end_time[0]) + 1;
-        end_time[1] = "00";
+      end_time[1] = Number(end_time[1])+30;
+      if(Number(end_time[1]) > 59){
+        end_time[0] = Number(end_time[0])+1;
+        end_time[1] = "00"; 
       }
       end_time = end_time.join(":");
-      let dat = new Date(date).toISOString().slice(0, 10); 
+      let dat = new Date(date).toISOString().slice(0 , 10);
       var data = {
         washer_id: JSON.parse(result),
         unavailable_date: dat,
-        start_time: fromtime,
+        start_time:fromtime, 
         end_time
       }
-      console.log("id...", data)
+      console.log("id...", data)    
       await washerUnavailableSet(data);
-      await getWasherUnavailable(data.unavailable_date, setUnavailabletime);
-      console.log("setUnavailabletime..", unavailabletime)
-      if (washerScheduleData) {
-        console.log("washerScheduleData..", washerScheduleData)
-        if (washerScheduleData.length == 0) {
+      await getWasherUnavailable(data.unavailable_date , setUnavailabletime);
+      console.log("setUnavailabletime..",unavailabletime)
+      if(extra){
+        console.log("washerScheduleData..",washerScheduleData)
+        if(washerScheduleData.length == 0){
           let a = unavailable_date;
           let b = [...busyDays];
           setSelectedWasherTime(true)
@@ -324,7 +325,6 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
     })
   }
 
-  
   // const onSelect = (index, color) => {
   //   if (color == 'white') {
   //     setModalVisible(true);
@@ -343,7 +343,7 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
 
   // }
 
-
+ 
   return (
     <View >
       <Modal
@@ -354,30 +354,30 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
         <TouchableOpacity activeOpacity={1} onPress={dismiss} style={{ flex: 1, backgroundColor: "#00000080", alignItems: 'center', justifyContent: 'center' }} >
           <TouchableOpacity activeOpacity={1} style={{ backgroundColor: 'white', borderRadius: 20, position: 'absolute', marginHorizontal: 25, overflow: 'hidden', height: '80%' }}>
             <View style={{ flexDirection: 'row', backgroundColor: '#ccc', padding: 16, width: 300, justifyContent: 'space-between' }}>
-              <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'center', alignItems: 'center', width: 150 }}>
+              <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'center', alignItems: 'center', width: 150}}>
                 <Icon name="calendar-today" />
                 <Text style={{ fontSize: 16, paddingHorizontal: 10 }}>{date.toDateString()}</Text>
               </View>
-              <View style={{ backgroundColor: '#ccc', padding: 10, width: 150 }}>
-                <View style={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingBottom: 4 }}>
-                  <FastImage tintColor="#c43636" source={require(`../../Assets/square.png`)} style={{ width: 20, height: 20, marginRight: 5 }} />
-                  <Text style={{ color: '#c43636', fontWeight: '800' }}>Booked</Text>
+              <View style={{backgroundColor: '#ccc', padding: 10, width: 150}}>
+                <View style={{width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingBottom: 4 }}>
+                  <FastImage tintColor="#c43636" source={require(`../../Assets/square.png`)}  style={{width: 20, height: 20, marginRight: 5}} />
+                  <Text style={{color: '#c43636', fontWeight: '800'}}>Booked</Text>
                 </View>
-                <View style={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingBottom: 4 }}>
-                  <FastImage tintColor="white" source={require(`../../Assets/square.png`)} style={{ width: 20, height: 20, marginRight: 5 }} />
-                  <Text style={{ color: 'white', fontWeight: '800' }}>Avaliable</Text>
+                <View style={{width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingBottom: 4 }}>
+                  <FastImage tintColor="white" source={require(`../../Assets/square.png`)}  style={{width: 20, height: 20, marginRight: 5}}/>
+                  <Text style={{color: 'white', fontWeight: '800'}}>Avaliable</Text>
                 </View>
-                <View style={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingBottom: 4 }}>
-                  <FastImage tintColor="#2596BE" source={require(`../../Assets/square.png`)} style={{ width: 20, height: 20, marginRight: 5 }} />
-                  <Text style={{ color: '#2596BE', fontWeight: '800' }}>Unavaliable</Text>
+                <View style={{width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingBottom: 4 }}>
+                  <FastImage tintColor="#2596BE" source={require(`../../Assets/square.png`)}  style={{width: 20, height: 20, marginRight: 5}}/>
+                  <Text style={{color: '#2596BE', fontWeight: '800'}}>Unavaliable</Text>
                 </View>
               </View>
             </View>
             <FlatList
-              data={["07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"]}
+              data={["07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00"]}
               // data={[... new Array(48)]}
               keyExtractor={(item, index) => index}
-              renderItem={({ item, index }) => <Hour item={item} index={index} select={onSelect} selected={index == date.getHours()} backgroundColor={checkBooking(item, unavailabletime)} />}
+              renderItem={({item,index})=><Hour item={item} index={index} select={onSelect} selected={index==date.getHours()} backgroundColor={checkBooking(item , unavailabletime)}/>}
               contentContainerStyle={{ padding: 10 }}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
@@ -389,15 +389,15 @@ const DailySchedule = ({ dismiss, item, date, onDChange, checkBooking }) => {
 }
 
 
-const Hour = ({ item, index, selected, select, backgroundColor }) => (
-  <TouchableOpacity onPress={() => select(item, backgroundColor)} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor: backgroundColor }} >
-    {/* <TouchableOpacity onPress={()=>select(item)} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor : selected ?Colors.blue_color :'white' }} >
+const Hour = ({ item, index,selected, select, backgroundColor }) => (
+  <TouchableOpacity onPress={()=>select(item, backgroundColor)} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor : backgroundColor }} >
+  {/* <TouchableOpacity onPress={()=>select(item)} style={{ borderRadius: 10, borderWidth: 1.5, borderColor: '#ddd', padding: 15, alignItems: 'center', backgroundColor : selected ?Colors.blue_color :'white' }} >
     
   </TouchableOpacity> */}
     {/* <Text style={{ fontSize: 16, fontWeight: 'bold', color : selected ? 'white' : 'black' }} > */}
-    <Text style={{ fontSize: 16, fontWeight: 'bold', color: backgroundColor == 'white' ? 'black' : 'white' }} >
+    <Text style={{ fontSize: 16, fontWeight: 'bold', color : backgroundColor == 'white' ? 'black' : 'white' }} >
       {/* {index%12 == 0 ? '12' : index % 12}:00 {index > 11 ? 'PM' : 'AM'}  */}
-      {item}
+      {item} 
       {/* { index % 2 == 0  ? getTime(index, true) : getTime(index, false) } */}
     </Text>
   </TouchableOpacity>
