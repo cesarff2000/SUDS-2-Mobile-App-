@@ -42,7 +42,7 @@ const VendorProfile = ({ navigation, route }) => {
   const { getFinishedJobImage, currentBooking } = useContext(BookingContext)
   const [images, setImages] = useState(LOADING)
   const windowDimensions = useWindowDimensions()
-  console.log('...',getFinishedJobImage);
+
 
   useEffect(() => getFinishedJobImage(setImages), [])
 

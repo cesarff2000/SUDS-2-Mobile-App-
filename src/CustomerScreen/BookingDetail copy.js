@@ -30,7 +30,7 @@ export default class MyNotificationsScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    console.log('Props : ', navigation)
+
     return (
       <View style={{ flex: 1 }}>
         <StatusBar

@@ -22,16 +22,16 @@ const JobFinished = ({ route, navigation }) => {
   const onSubmit = async data => {
     // console.log("onsubmit working", onSubmit);
     const params={};
-    console.log("image", images);
+
     images.forEach((image, i)=>params['image'+(i===0?'' : i)]=image)
     params["comment"]="Done"
-    console.log(data.comment,"comment");
+  
     // console.log({ ...data, booking_id: booking.booking_id })
     if(images.length<4) return Alert.alert('Images', 'Please make sure to add 4 images related to that wash.')
     setLoading(true);
-    console.log("camera pram", data);
+
     let json = await finishedjob({ ...params, booking_id: booking.booking_id,  })
-    console.log('finishedjob',json);
+
     setLoading(false)
     if (json) {
       setTrue()
@@ -43,7 +43,7 @@ const JobFinished = ({ route, navigation }) => {
   useEffect(() => console.log(images.length), [images])
 
   const onImagePickerCallback = (res, fromCamera) => {
-console.log('onImagePickerCallback',res, images);
+
 
     if (res.didCancel) return
     // if(images.length<3) fromCamera ? launchCamera({}, (res)=>onImagePickerCallback(res, true)) : launchImageLibrary({}, (res)=>onImagePickerCallback(res, false))

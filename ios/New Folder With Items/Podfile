@@ -20,7 +20,7 @@ target 'Suds_2_U' do
     :hermes_enabled => false
   )
 
-  pod 'RNPaypal', :path => '../node_modules/react-native-paypal'
+
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 

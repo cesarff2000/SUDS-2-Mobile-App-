@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Image, SafeAreaView, ImageBackground } from 'react-native';
 import CtaButton from '../Components/CtaButton';
 import { CUSTOMER, type } from '../Navigation/NavigationService';
-console.log('user type', global.usertype)
+
 const ChooseScreen = ({ navigation }) => (
 
   <View style={{ flex: 1, flexDirection: 'column' }}>

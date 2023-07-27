@@ -161,14 +161,14 @@ const MultiSelectVehicle = ({navigation}) => {
 
   useEffect(() => {
     if(vehicles.length > 0){
-        console.log('vehicles : ', vehicles)
+   
         var allType = types
         vehicles.forEach(element => {
             element.sub_category_id = element.vehicle_id
             element.sub_category_name = element.make + ' ' + element.model
             allType.push(element)
         });
-        console.log('All  : ', allType)
+        
         
     }
   }, [vehicles])
@@ -289,8 +289,7 @@ const MultiSelectVehicle = ({navigation}) => {
       Alert.alert("Select Vehicle", "Please select a vehicle to continue.");
     else {
         var vehicle_id = selectTypes.map(st => {if(st.category_id == 1) return st.vehicle_id})
-        console.log('vehicle_id : ', vehicle_id)
-        console.log('type : ', selectTypes)
+        
       setCurrentBooking((cv) => ({
         ...cv,
         // vehicle_id: selectState[0]?.vehicle_id,

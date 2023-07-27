@@ -52,15 +52,7 @@ export default BusinessWash = ({ navigation }) => {
       <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'center', marginTop: 'auto' }}>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <TouchableOpacity
-            elevation={5}
-            onPress={onContinue}
-            style={styles.auth_btn}
-            underlayColor='gray'
-            activeOpacity={0.8} >
-            <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Continue</Text>
-
-          </TouchableOpacity>
+          
           <TouchableOpacity
             elevation={5}
             onPress={() => { }}
@@ -68,6 +60,15 @@ export default BusinessWash = ({ navigation }) => {
             underlayColor='gray'
             activeOpacity={0.8} >
             <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Cancel</Text>
+
+          </TouchableOpacity>
+          <TouchableOpacity
+            elevation={5}
+            onPress={onContinue}
+            style={styles.auth_btn}
+            underlayColor='gray'
+            activeOpacity={0.8} >
+            <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Continue</Text>
 
           </TouchableOpacity>
         </View>

@@ -31,7 +31,6 @@ const BackgroundCheck = ({ navigation, route }) => {
 
   const onSubmit = (data) => {
     if (!dob) return Alert.alert('Date of birth', 'Please insert your date of birth', [{ text: 'Ok', onPress: () => setDatePickerVisibility(true) }])
-    console.log(JSON.stringify({ ...data, dob: moment(dob).format('YYYY-MM-DD') }, null, 2))
     submitBackgroundCheckData({ ...data, dob: moment(dob).format('YYYY-MM-DD') }, () => navigation.goBack())
   }
 

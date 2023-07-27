@@ -14,7 +14,7 @@ const WasherReviews = ({ }) => {
 
     useEffect(() => getWasherReviews(state,setState), []);
 
-    useEffect(() => console.log('state : ', state), [state])
+  
 
     const List = () => {
         switch (state) {

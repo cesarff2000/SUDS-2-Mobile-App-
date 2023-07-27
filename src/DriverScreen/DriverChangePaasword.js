@@ -21,7 +21,7 @@ const DriverChangePassword = () => {
 
   const onSubmit = async data => {
     if (data.confirm_password != data.newpassword) return Alert.alert('Confirm password', "Your password doesn't match confirmation");
-    console.log(data)
+   
     setLoading(true);
     let success = await changePassword(data);
     setLoading(false);

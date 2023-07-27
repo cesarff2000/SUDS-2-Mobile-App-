@@ -13,36 +13,36 @@ export const SCHEDULED = '0'
 export let dontShow = false
 
 export function setTrue() {
-  dontShow = true
+    dontShow = true
 }
 
 export const navigate = (routeName, params) => {
-  navigationRef.current?.navigate(routeName, params);
+    navigationRef.current?.navigate(routeName, params);
 };
 
 export const opedDrawer = () => {
-  navigationRef.current?.openDrawer();
+    navigationRef.current?.openDrawer();
 };
 
 export const changeStack = stackName => {
-  resetRoot(stackName);
+    resetRoot(stackName);
 };
 
 const resetRoot = routeName => {
-  navigationRef.current?.resetRoot({
-    index: 0,
-    routes: [{name: routeName}],
-  });
+    navigationRef.current?.resetRoot({
+        index: 0,
+        routes: [{ name: routeName }],
+    });
 };
 
 export const defaultScreenOptions = {
-  headerStyle: {backgroundColor: Colors.blue_color},
-  headerTitleStyle: {color: 'white'},
-  headerTitleAlign: 'center',
-  headerTintColor: 'white',
-  detachPreviousScreen : false,
-  ...TransitionPresets.SlideFromRightIOS,
-  // cardStyle: {backgroundColor: '#000'},
+    headerStyle: { backgroundColor: Colors.blue_color },
+    headerTitleStyle: { color: 'white' },
+    headerTitleAlign: 'center',
+    headerTintColor: 'white',
+    detachPreviousScreen: false,
+    ...TransitionPresets.SlideFromRightIOS,
+    // cardStyle: {backgroundColor: '#000'},
 };
 
 export const onStartAction = React.createRef()

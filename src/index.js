@@ -6,6 +6,7 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import { initNotificatoins } from './Services/NotificatoinService';
+import 'react-native-reanimated';
 
 export const NOTIFICATION_TYPES = {
     NEW_ON_DEMAND_REQUEST: "0",

@@ -19,7 +19,7 @@ const TermsConditions = () => {
 
 
 
-  console.log(userData.stage)
+
   return (
     <View
       style={{

@@ -33,6 +33,15 @@ const RvBusMH = ({ navigation }) => {
       </View>
       <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'center', marginTop: 10 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        
+          <TouchableOpacity
+            elevation={5}
+            onPress={() => { }}
+            style={styles.auth_btn}
+            underlayColor='gray'
+            activeOpacity={0.8}>
+            <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Cancel</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             elevation={5}
             onPress={onNext}
@@ -42,14 +51,6 @@ const RvBusMH = ({ navigation }) => {
             <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Continue</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            elevation={5}
-            onPress={() => { }}
-            style={styles.auth_btn}
-            underlayColor='gray'
-            activeOpacity={0.8}>
-            <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Cancel</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </View>

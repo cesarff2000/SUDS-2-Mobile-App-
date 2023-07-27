@@ -17,13 +17,13 @@ const PayPal = ({ route }) => {
 
     const onSubmit = async data => {
         setLoading(true);
-        console.log(data)
+    
         setLoading(false);
     };
 
     return (
         <ImageBackground style={styles.imgBg} source={require('../../Assets/bg_img.png')}>
-            <View style={styles.container}>
+            {/* <View style={styles.container}>
                 <LoadingView loading={loading} fetching={fetching}>
                     <View style={{justifyContent : 'center', height : '100%', paddingBottom : 150}}>
                     <View style={{ width: 150, height: 150,backgroundColor: 'white', borderRadius: 120, alignSelf: 'center', padding : 20, alignItems : 'center', justifyContent : 'center' }}>
@@ -42,7 +42,7 @@ const PayPal = ({ route }) => {
                     </View>
                   
                 </LoadingView>
-            </View>
+            </View> */}
         </ImageBackground>
     );
 };

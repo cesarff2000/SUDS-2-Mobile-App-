@@ -13,7 +13,8 @@ export const requestUserPermission = async () => {
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-        console.log('Authorization status:', authStatus);
+        
+        
     }
 }
 
@@ -30,7 +31,8 @@ export const initNotificatoins = () => {
     PushNotification.configure({
         // (optional) Called when Token is generated (iOS and Android)
         onRegister: function (token) {
-            console.log(token)
+            
+            
         },
 
         // // (required) Called when a remote is received or opened, or local notification is opened
@@ -56,12 +58,13 @@ export const initNotificatoins = () => {
 
         // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
         onAction: function (notification) {
-            console.log(notification)
+            
         },
 
         // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
         onRegistrationError: function (err) {
-            console.error(err.message, err)
+         
+            
         },
 
         // IOS ONLY (optional): default: all - Permissions to register.
@@ -103,8 +106,8 @@ export const initNotificatoins = () => {
                 importance: 4, // (optional) default: 4. Int value of the Android notification importance
                 vibrate: true // (optional) default: true. Creates the default vibration patten if true.
             },
-            created => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-        )
+            created =>{}) // (optional) callback returns whether the channel was created, false means it already existed.
+        
     }
 
 }

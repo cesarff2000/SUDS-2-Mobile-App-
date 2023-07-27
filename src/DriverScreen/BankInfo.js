@@ -37,7 +37,6 @@ const BankInfo = () => {
   } = useForm();
 
   const onSubmit = async data => {
-    console.log({...data, routing_number: data.routing_number.name});
     if (data.account_number !== data.confirm_account_number) Alert.alert('Account number', "Your account number doesn't match");
     else {
       setLoading(true);
@@ -55,7 +54,7 @@ const BankInfo = () => {
     let json = await getBankInfo();
     setFetching(false);
     if (json?.response) {
-      console.log(JSON.stringify(json.data));
+  
       let savedRoutingNumber = routingNumbers.find(item => json.data.routing_number == item.name);
       reset({...json.data, routing_number: savedRoutingNumber, confirm_account_number: json.data.account_number});
     }

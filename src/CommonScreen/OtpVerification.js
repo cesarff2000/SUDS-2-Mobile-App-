@@ -16,7 +16,7 @@ const OTPverification = ({navigation, route}) => {
   const [otp, setOtp] = useState(route.params?.otp)
 
   const onSubmit = async () => {
-    console.log(otp, otpInput);
+  
     if (otp + '' == otpInput) {
       setLoading(true)
       let success  = await otpVerified()

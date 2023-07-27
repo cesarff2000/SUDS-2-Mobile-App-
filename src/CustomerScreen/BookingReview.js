@@ -10,7 +10,6 @@ import { BookingContext, calculateTotalPriceNew } from '../Providers/BookingProv
 import { Alert } from 'react-native';
 import { useConfirmSetupIntent, useStripe } from '@stripe/stripe-react-native';
 import LoadingView from '../Components/LoadingView';
-import { requestOneTimePayment, requestBillingAgreement } from 'react-native-paypal';
 import { bookingType, changeStack, navigate, ON_DEMAND, SCHEDULED, type, WASHER } from '../Navigation/NavigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -29,9 +28,10 @@ const BookingReview = () => {
     const [extraTimeFee, setExtraTimeFee] = useState('Loading...')
     const [serviceFee, setServiceFee] = useState('Loading...')
     const [discountRate, setDiscountRate] = useState(0)
+    const [counponamount, setCounponamount] = useState(0)
     const [pendingCoupon, setPendingCoupon] = useState()
     const [localbooking, setLocalbooking] = useState()
-    console.log("localbooking...",localbooking);
+   
     const [bookingTotal, setBookingTotal] = useState(0)
     const [coupencodeapply, setCouponCodeApply] = useState(0)
 
@@ -44,7 +44,7 @@ const BookingReview = () => {
             setDiscountRate(parseFloat(coupon?.discount_amount) / 100)
             setPendingCoupon(coupon)
             setCouponCode(coupon.id)
-            console.log('coupon1..', coupon)
+         
 
         })
 
@@ -60,18 +60,14 @@ const BookingReview = () => {
                         coupen += Number(data.price)
                         let addonPrice = 0;
                         if(data.selectedAddOns && Array.isArray(data.selectedAddOns)) {
-                            console.log("data.selectedAddOns", data.selectedAddOns);
                             addonPrice = data.selectedAddOns.reduce((prevAddonValue, currentAddonValue)=>{
                                 return parseFloat(prevAddonValue) + parseFloat(currentAddonValue.add_ons_price);
-                              }, 0)
-                              console.log("addonPrice", addonPrice);
+                            }, 0)
                         }
                         total += addonPrice;
                     })
-
                     setBookingTotal(total);
                     setCouponCodeApply(coupen);
-                    console.log('....ondemand10', data.price)
 
                     setCurrentBooking(cv => ({ ...cv, total: calculateTotalPriceNew(storedata, discountRate) }))
                     getExtraTimeFee(setExtraTimeFee)
@@ -87,17 +83,15 @@ const BookingReview = () => {
                         total += Number(data.price) + Number(data.serviceFee) + Number(data.extraTimeFee)
                         let addonPrice = 0;
                         if(data.selectedAddOns && Array.isArray(data.selectedAddOns)) {
-                            console.log("data.selectedAddOns", data.selectedAddOns);
                             addonPrice = data.selectedAddOns.reduce((prevAddonValue, currentAddonValue)=>{
                                 return parseFloat(prevAddonValue) + parseFloat(currentAddonValue.add_ons_price);
                               }, 0)
-                              console.log("addonPrice", addonPrice);
                         }
                         total += addonPrice;
                     })
                     setCurrentBooking(cv => ({ ...cv, total: total }))
                     setBookingTotal(total);
-                    console.log('....schedule', result)
+             
                     setCurrentBooking(cv => ({ ...cv, total: calculateTotalPriceNew(storedata, discountRate) }))
                     getExtraTimeFee(setExtraTimeFee)
                     getServiceFee(setServiceFee)
@@ -109,7 +103,7 @@ const BookingReview = () => {
     const fetchPaymentSheetParams = async () => {
         setLoading(true)
         let json = await getPaymentIntent(Math.round((calculateTotalPriceNew(localbooking, discountRate) * 100) * 100) / 100)
-        console.log('fetchPaymentSheetParams',json);
+
         setLoading(false)
         if (json) return json
     };
@@ -133,10 +127,10 @@ const BookingReview = () => {
             customerEphemeralKeySecret: ephemeralKey,
             paymentIntentClientSecret: paymentIntent,
         });
-        console.log(customer)
+        
         setClientSecret(paymentIntent)
         if (!error) {
-            console.log(paymentIntent)
+            
           }
     return paymentIntent;
     };
@@ -152,36 +146,29 @@ const BookingReview = () => {
         } else {
             onPaymentSuccess()
             AsyncStorage.removeItem('multipledatastore');
-
             AsyncStorage.removeItem('multipledatastoreschedule')
-
             AsyncStorage.removeItem('current_vendor')
         }
     };
 
     const onPaymentSuccess = async () => {
         setLoading(true)
-        // Alert.alert('hdf')
         if (pendingCoupon) await onApplyCoupon()
         let json = await saveBooking()
         setLoading(false)
-        console.log(JSON.stringify(currentBooking, null, 2))
-        console.log('Booking review > . > . >', json)
+       
         if (json) {
             AsyncStorage.removeItem('pending_coupon')
             changeStack('CustomerHomeStack')
-            console.log('SAVE BOOKING RESPONSE =>', json)
+         
             AsyncStorage.getItem('currenctAction').then((result) => {
                 let res = JSON.parse(result);
 
+              
                 if (res == "SCHEDULED") return Alert.alert("Congrats!", "Your wash appointment has been booked, you will receive a notification once the washer has confirmed. Thank you for your business.")
-                // if(bookingType.current==ON_DEMAND) return setTimeout(()=>navigate('NearByWasher', { booking_id: json.booking_id }),1000)
                 if (res == "ON_DEMAND") return Alert.alert("Congrats!", "Your wash appointment has been booked, you will receive a notification once the washer has confirmed. Thank you for your business."), setTimeout(() => navigate('Near By Washers', { booking_id: json.booking_id }), 1000)
             })
-            // if(bookingType.current==ON_DEMAND)
-            // {
-            // return Alert.alert("Congrats!", "Your wash appointment has been booked, you will receive a notification once the washer has confirmed. Thank you for your business.",setTimeout(()=>navigate('Near By Washers', { booking_id: json.booking_id }),1000));
-            // } 
+           
         }
     };
 
@@ -189,13 +176,12 @@ const BookingReview = () => {
         if (couponCode.length == 0) return Alert.alert('Error', 'Please insert a coupon code first.')
         setLoading(true)
         let json = await applyCoupon({ coupan_code: couponCode, type: pendingCoupon ? undefined : 'apply-coupon' })
-        console.log('JSON >>> ', json)
         if (json) {
             if (!pendingCoupon) Alert.alert('Success', `A discount of ${json.data.amount}% is added to your total payment.`)
             setDiscountRate(parseFloat(json.data.amount) / 100)
             setCurrentBooking(cv => ({ ...cv, coupan_code: couponCode }))
-            console.log("totalbooking", bookingTotal, coupencodeapply, discountRate)
-            setBookingTotal(bookingTotal - (coupencodeapply * json.data.amount / 100))
+            setCounponamount(bookingTotal * parseFloat(json.data.amount) / 100)
+            setBookingTotal(bookingTotal - (bookingTotal * json.data.amount / 100))
         }
         setLoading(false)
     }
@@ -205,7 +191,7 @@ const BookingReview = () => {
         try {
             const res = await fetch('https://suds-2-u.com/BraintreePayments/main.php')
             let token = await res.text()
-            console.log("Paypal client token", token)
+            
             // For one time payments
             const value = await requestOneTimePayment(token,
                 {
@@ -219,21 +205,24 @@ const BookingReview = () => {
             )
 
             onPaymentSuccess()
-            console.log(value)
+         
         } catch (error) {
             Alert.alert("Error", "Something went wrong")
         } finally { setLoading(false) }
     }
 
     const onCancel = () => {
-        console.log("bro code")
+        AsyncStorage.removeItem('pending_coupon')
+        AsyncStorage.removeItem('multipledatastore');
+        AsyncStorage.removeItem('multipledatastoreschedule')
+        AsyncStorage.removeItem('current_vendor')
         changeStack('CustomerHomeStack')
-        AsyncStorage.removeItem('multipledatastore')
+        
     }
 
     const getdata = async () => {
         const result = await AsyncStorage.getItem('multipledatastore');
-        console.log('multipledatastore..', result)
+      
         return (<Divider />)
     }
 
@@ -279,9 +268,7 @@ const BookingReview = () => {
                                         "% | " +
                                         "-$" +
                                         (
-                                            coupencodeapply
-                                            *
-                                            discountRate
+                                            counponamount
 
                                         ).toFixed(2)
                                     } />
@@ -306,21 +293,7 @@ const BookingReview = () => {
                             </View>}
 
                             <View style={{ width: '100%', height: 0.5, backgroundColor: '#aaa', marginVertical: 10 }} />
-                            <TouchableOpacity onPress={() => setPaidWith(PAYMENT_METHOD.PAY_WITH_PAYPAL)} style={styles.payment_btn}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <View style={{ flexDirection: 'row', }}>
-                                        <Image style={{ width: 35, height: 35, tintColor: Colors.blue_color, marginLeft: 15 }} source={require('../../Assets/icon/paypal-logo.png')} />
-                                        <Text style={{ textAlign: 'center', fontWeight: 'bold', marginTop: 5, marginLeft: 5, fontSize: 16 }}>Pay via PayPal</Text>
-                                    </View>
-                                    <CheckBox
-                                        style={{ padding: 10 }}
-                                        onClick={() => setPaidWith(PAYMENT_METHOD.PAY_WITH_PAYPAL)}
-                                        isChecked={PAYMENT_METHOD.PAY_WITH_PAYPAL == paidWith}
-                                        checkedImage={<Image source={require('../../Assets/icon/checked.png')} style={{ width: 22, height: 22 }} />}
-                                        unCheckedImage={<Image source={require('../../Assets/icon/unchecked.png')} style={{ width: 22, height: 22 }} />}
-                                    />
-                                </View>
-                            </TouchableOpacity>
+                            
 
                             <TouchableOpacity onPress={() => setPaidWith(PAYMENT_METHOD.PAY_WITH_STRIPE)} style={styles.payment_btn}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -341,15 +314,7 @@ const BookingReview = () => {
                     </ScrollView>
                 </LoadingView>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 'auto' }}>
-                    <TouchableOpacity
-                        elevation={5}
-                        onPress={onReviewConfirm}
-                        // onPress={() => { navigation.navigate('Booking Confirm'); }}
-                        style={styles.auth_btn}
-                        underlayColor='gray'
-                        activeOpacity={0.8}>
-                        <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold', opacity: paidWith == PAYMENT_METHOD.NONE_CHOOSEN ? 0.7 : 1 }}>REVIEW & CONFIRM</Text>
-                    </TouchableOpacity>
+                   
                     <TouchableOpacity
                         elevation={5}
                         onPress={onCancel}
@@ -357,6 +322,14 @@ const BookingReview = () => {
                         underlayColor='gray'
                         activeOpacity={0.8}>
                         <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold', opacity: paidWith == PAYMENT_METHOD.NONE_CHOOSEN ? 0.7 : 1 }}>CANCEL</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        elevation={5}
+                        onPress={onReviewConfirm}
+                        style={styles.auth_btn}
+                        underlayColor='gray'
+                        activeOpacity={0.8}>
+                        <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold', opacity: paidWith == PAYMENT_METHOD.NONE_CHOOSEN ? 0.7 : 1 }}>REVIEW & CONFIRM</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
@@ -376,19 +349,15 @@ const Detail = ({ name, detail, higlightDetail }) => (
 )
 const styles = StyleSheet.create({
     auth_textInput: {
-
         alignSelf: 'center',
         width: '60%',
-        // borderWidth: 1,
         borderBottomWidth: 0,
         height: 40, fontSize: 16,
         color: Colors.text_color,
         marginTop: 5,
         backgroundColor: '#fff', padding: 5, borderRadius: 5
-
     },
     auth_btn: {
-
         paddingTop: 10,
         paddingBottom: 10,
         backgroundColor: '#e28c39',
@@ -407,7 +376,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     add_btn: {
-
         backgroundColor: Colors.blue_color,
         alignItems: 'center',
         width: '33%',

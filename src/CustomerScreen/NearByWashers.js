@@ -31,7 +31,7 @@ export default NearbyWashers = ({ route }) => {
 
     useEffect(() => {
         getNearByWasherLocations((washers, userLocation) => {
-            console.log('userLocation..',userLocation)
+      
             setNearbyWashers(washers)
             mapRef.current.animateCamera({ zoom: 15, pitch: 2, heading: 2, altitude: 2, center: { ...userLocation } }, { duration: 1000 })
         }, userLocation => mapRef.current.animateCamera({ zoom: 15, pitch: 2, heading: 2, altitude: 2, center: { ...userLocation } }, { duration: 1000 }))

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, FlatList, Alert } from 'react-native';
 import Colors from '../../Constants/Colors';
 import { useNavigation } from '@react-navigation/core';
@@ -27,9 +28,27 @@ const Packages = ({ route }) => {
     const onNext = () => {
         if (selectedPackage == undefined) Alert.alert('Select Package', 'Please select a package to continue.')
         else {
+            AsyncStorage.getItem('Package_time').then(result => {
+                if(result != null )
+                {
+                    let timeset = result;
+                    let newtimeadd = packages[selectedPackage].package_time;
+                    let newaplytime = newtimeadd.replace(":", ".");
+                    let newtime = Number(timeset) + Number(newaplytime);
+                    AsyncStorage.setItem('Package_time', ''+newtime);
+                }
+                else{
+                    let newtimeadd = packages[selectedPackage].package_time;
+                    let newaplytime = newtimeadd.replace(":", ".");
+                    AsyncStorage.setItem('Package_time', ''+newaplytime);
+                }
+               
+            })
+           
             setCurrentBooking(cv => ({
                 ...cv,
                 package: packages[selectedPackage].package_id || packages[selectedPackage].id,
+                packageTime: packages[selectedPackage].package_time,
                 packageDetails: { name: packages[selectedPackage].type || packages[selectedPackage].package_name, price: packages[selectedPackage].package_price || packages[selectedPackage].price }
             }))
             navigate('Select Add Ons')
@@ -44,7 +63,7 @@ const Packages = ({ route }) => {
         let json = await getPackages(packageParams)
         setFetching(false)
         if (json?.data) {
-            console.log(json?.data)
+       
             setPackages(json.data)
         }
     }
@@ -68,14 +87,7 @@ const Packages = ({ route }) => {
 
                 <View style={{ alignItems: 'center', marginTop: 'auto' }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TouchableOpacity
-                            elevation={5}
-                            onPress={onNext}
-                            style={styles.auth_btn}
-                            underlayColor='gray'
-                            activeOpacity={0.8}>
-                            <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Next</Text>
-                        </TouchableOpacity>
+                       
                         <TouchableOpacity
                             elevation={5}
                             onPress={() => changeStack('CustomerHomeStack')}
@@ -83,6 +95,14 @@ const Packages = ({ route }) => {
                             underlayColor='gray'
                             activeOpacity={0.8}>
                             <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            elevation={5}
+                            onPress={onNext}
+                            style={styles.auth_btn}
+                            underlayColor='gray'
+                            activeOpacity={0.8}>
+                            <Text style={{ fontSize: 16, textAlign: 'center', color: Colors.buton_label, fontWeight: 'bold' }}>Next</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -155,10 +175,14 @@ const DetailPopup = ({ dismiss, item }) => {
                 animationType="fade">
                 <TouchableOpacity activeOpacity={1} onPress={dismiss} style={{ flex: 1, backgroundColor: "#00000080", alignItems: 'center', justifyContent: 'center' }} >
                     <View style={{ backgroundColor: 'white', borderRadius: 15, position: 'absolute', marginHorizontal: 75, overflow: 'hidden' }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#e5e5e5', padding: 16, width: '100%' }}>
+                        <View style={{ flexDirection: 'row',  backgroundColor: '#e5e5e5', padding: 16, width: '100%' }}>
                             <Image style={{ height: 20, width: 20, padding: 5, borderRadius: 10, tintColor: Colors.blue_color }} source={require('../../Assets/help.png')} />
+
                             <Text style={{ fontSize: 16, paddingHorizontal: 16 }}>{item.package_name || item.type}</Text>
-                            <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 'auto' }}>${parseFloat(item.package_price || item.price).toFixed(2)}</Text>
+                            <View style={{marginTop:3}}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 'auto' }}>${parseFloat(item.package_price || item.price).toFixed(2)}</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 'auto',marginTop:8 }}>{item.package_time} min</Text>
+                            </View>
                         </View>
                         <Text style={{ padding: 16 }} >{item.package_description || item.description}</Text>
                     </View>

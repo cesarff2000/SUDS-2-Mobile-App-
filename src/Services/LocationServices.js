@@ -2,7 +2,7 @@ import { Alert, PermissionsAndroid, Platform, ToastAndroid } from 'react-native'
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
-Geocoder.init("AIzaSyDC6TqkoPpjdfWkfkfe641ITSW6C9VSKDM");
+Geocoder.init("AIzaSyB7qa8Uk4xxkHnrV6mGUCJrte7g9WH_hPA");
 
 const [YES, NO, WAIT] = [1, 2, 3]
 
@@ -61,7 +61,7 @@ export const getCurrentPosition = () => {
 export const getFormattedAddress = async (lat, lng) => {
   try {
     let json = await Geocoder.from(lat, lng);
-    console.log("getFormattedAddress",json)
+    
     return json.results[0].formatted_address
   } catch (error) {
     console.log(error)

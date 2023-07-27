@@ -567,7 +567,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
-  - RNPaypal (from `../node_modules/react-native-paypal`)
+
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -690,8 +690,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
-  RNPaypal:
-    :path: "../node_modules/react-native-paypal"
+  
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:

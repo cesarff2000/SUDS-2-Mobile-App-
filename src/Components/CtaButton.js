@@ -3,6 +3,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Colors from '../../Constants/Colors';
 
 const CtaButton = ({onPress, primary, title, style}) => {
+  console.log('0',primary)
   return (
     <TouchableOpacity
       elevation={5}

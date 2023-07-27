@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 
 app.post('/payment-sheet', jsonParser, async (req, res) => {
   let { charge, customer_id } = req.body
-  console.log(charge, customer_id)
+
   
   // If there is customer_id in the request that means the user is not new so use the retrive method
   const customer = customer_id ? await stripe.customers.retrieve(customer_id) : await stripe.customers.create()

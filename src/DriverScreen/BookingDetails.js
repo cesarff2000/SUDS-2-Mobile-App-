@@ -37,11 +37,11 @@ const BookingDetails = ({ route }) => {
     if (booking?.tip !== "0") {
       setSelectedTip(booking?.tip);
     }
-    console.log("booking....",booking)
+   
   }, [booking]);
 
   const getBooking = () => {
-    console.log('Log here');
+    
   }
 
   const Body = () => {

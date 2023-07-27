@@ -31,11 +31,10 @@ const WorkInProgress = ({ navigation, route }) => {
 
 
   useEffect(async() => {
-    console.log('booking1......',route.params?.booking.totaltime)
-    console.log("asrasdsad",route.params.booking.booking_date)
+   
     let a = await getSingleBookingDetails(booking.booking_id);
     setBooking_time(a.data);
-    console.log("a2..",a)
+    
 
       AsyncStorage.getItem("washer_id").then(async (result) => {
         var data = {
@@ -49,7 +48,7 @@ const WorkInProgress = ({ navigation, route }) => {
       AsyncStorage.getItem('multipledatastoreschedule').then(result => {
         let storedata = JSON.parse(result) || []
         setLocalbooking(storedata);
-        console.log('res4',result)
+      
     })
    
   },[])

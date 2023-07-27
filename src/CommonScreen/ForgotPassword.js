@@ -19,7 +19,7 @@ const ForgotPassword = ({navigation}) => {
   } = useForm();
 
   const onSubmit = async ({ emailid }) => {
-    console.log(emailid)
+  
     setLoading(true)
     let success = await forgotPassword(emailid)
     setLoading(false)

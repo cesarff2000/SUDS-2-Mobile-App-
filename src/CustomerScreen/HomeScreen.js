@@ -104,7 +104,7 @@ const { userData, updateUserLocation, changeImage } = useContext(AuthContext)
   return (
     <View style={{ flex: 1, }}>
       <LoadingView />
-      <NotificationController />
+      <NotificationController navigation={navigation} />
       <View style={{ width: '100%', height: 40, backgroundColor: '#e28c39', justifyContent: 'center' }}>
         <Rewards></Rewards>
       </View>
